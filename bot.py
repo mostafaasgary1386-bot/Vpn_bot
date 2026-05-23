@@ -164,4 +164,19 @@ def support(message):
 
 # --- حساب من ---
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
-def
+def my_account(message):
+    first_name = message.from_user.first_name
+    username = message.from_user.username or "یوزرنیم ثبت نشده"
+    bot.send_message(message.chat.id, f"👤 نام: {first_name}\n🔗 یوزرنیم: @{username}")
+
+# --- تاریخچه ---
+@bot.message_handler(func=lambda m: m.text == "📜 تاریخچه")
+def history(message):
+    user_services = services.get(message.chat.id, [])
+    if user_services:
+        bot.send_message(message.chat.id, "📜 تاریخچه خریدهای شما:\n" + "\n".join(user_services))
+    else:
+        bot.send_message(message.chat.id, "❌ هنوز خریدی ثبت نشده است.")
+
+# --- اجرای ربات ---
+bot.polling(none_stop=True)
