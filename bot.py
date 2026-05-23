@@ -164,6 +164,4 @@ def support(message):
 
 # --- حساب من ---
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
-def my_account(message):
-    first_name = message.from_user.first_name
-    username = message
+def
