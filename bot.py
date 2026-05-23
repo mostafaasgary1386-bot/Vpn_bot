@@ -41,24 +41,9 @@ configs = {
             }
         ]
     },
-    "2 گیگ": {
-        "price": 398000,
-        "details": "کانفیگ 2 گیگ پرسرعت",
-        "stock": 0,
-        "pairs": []
-    },
-    "4 گیگ": {
-        "price": 796000,
-        "details": "کانفیگ 4 گیگ پرسرعت",
-        "stock": 0,
-        "pairs": []
-    },
-    "5 گیگ": {
-        "price": 995000,
-        "details": "کانفیگ 5 گیگ پرسرعت",
-        "stock": 0,
-        "pairs": []
-    },
+    "2 گیگ": {"price": 398000, "details": "کانفیگ 2 گیگ پرسرعت", "stock": 0, "pairs": []},
+    "4 گیگ": {"price": 796000, "details": "کانفیگ 4 گیگ پرسرعت", "stock": 0, "pairs": []},
+    "5 گیگ": {"price": 995000, "details": "کانفیگ 5 گیگ پرسرعت", "stock": 0, "pairs": []},
 }
 
 CARD_NUMBER = "5022291581967849"
@@ -74,11 +59,7 @@ def send_welcome(message):
     markup.row("📦 سرویس‌های من", "📊 استعلام موجودی")
     markup.row("🎫 تیکت پشتیبانی", "👤 حساب من")
     markup.row("📜 تاریخچه")
-    bot.send_message(
-        message.chat.id,
-        f"سلام {first_name} 👋\nبه ربات فروش خوش آمدی.",
-        reply_markup=markup
-    )
+    bot.send_message(message.chat.id, f"سلام {first_name} 👋\nبه ربات فروش خوش آمدی.", reply_markup=markup)
 
 # --- فروشگاه ---
 @bot.message_handler(func=lambda m: m.text == "🛒 فروشگاه")
@@ -121,8 +102,7 @@ def process_buy(call):
                     f"{config_name}\n🔗 سرویس: {service_link}\n🔗 ساب: {sub_link}"
                 )
 
-                bot.send_message(
-                    user_id,
+                bot.send_message(user_id,
                     f"✅ خرید {config_name} موفق بود.\n"
                     f"💰 قیمت: {price} تومان\n"
                     f"🔗 سرویس: {service_link}\n"
@@ -154,8 +134,7 @@ def get_amount(message):
         "balance": wallets.get(message.chat.id, {}).get("balance", 0)
     }
     
-    bot.send_message(
-        message.chat.id,
+    bot.send_message(message.chat.id,
         f"✅ مبلغ {amount} تومان ثبت شد.\n"
         f"برای تایید رسید لطفاً دقیقاً {final_amount} تومان واریز کنید.\n\n"
         f"💳 شماره کارت:\n`{CARD_NUMBER}`\n👤 به نام: {CARD_NAME}\n\n"
@@ -185,4 +164,6 @@ def support(message):
 
 # --- حساب من ---
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
-def
+def my_account(message):
+    first_name = message.from_user.first_name
+    username = message
