@@ -10,13 +10,13 @@ bot = telebot.TeleBot(API_TOKEN)
 wallets = {}
 services = {}
 
-#ليست کانفيگ ها
+# لیست کانفیگ‌ها (قیمت = 199000 * تعداد گیگ)
 configs = {
-    "1 گیگ": {"price": 199000, "details": "کانفیگ 1 گیگ پرسرعت"},
-    "2 گیگ": {"price": 398000, "details": "کانفیگ 2 گیگ پرسرعت"},
-    "4 گیگ": {"price": 796000, "details": "کانفیگ 4 گیگ پرسرعت"},
-    "5 گیگ": {"price": 995000, "details": "کانفیگ 5 گیگ پرسرعت"},
-    "6 گیگ": {"price": 1194000, "details": "کانفيگ 6 گيگ پرسرعت"},
+    "1 گیگ": {"price": 199000 * 1, "details": "کانفیگ 1 گیگ پرسرعت"},
+    "2 گیگ": {"price": 199000 * 2, "details": "کانفیگ 2 گیگ پرسرعت"},
+    "4 گیگ": {"price": 199000 * 4, "details": "کانفیگ 4 گیگ پرسرعت"},
+    "5 گیگ": {"price": 199000 * 5, "details": "کانفیگ 5 گیگ پرسرعت"},
+    "6 گیگ": {"price": 199000 * 6, "details": "کانفیگ 6 گیگ پرسرعت"},  # اضافه شد
 }
 
 ADMIN_ID = 5048925895
@@ -109,7 +109,7 @@ def receive_receipt(message):
         bot.send_message(ADMIN_ID, f"📩 رسید کاربر {message.chat.id} دریافت شد. آیا تایید می‌کنید؟", reply_markup=markup)
         bot.send_message(message.chat.id, "📩 رسید شما ارسال شد. منتظر تایید مدیر باشید.")
 
-# --- مدیریت دکمه‌های تایید/رد ---
+# --- مدیریت تایید/رد ---
 @bot.callback_query_handler(func=lambda call: call.data.startswith("confirm_") or call.data.startswith("reject_"))
 def handle_admin_action(call):
     user_id = int(call.data.split("_")[1])
@@ -120,9 +120,9 @@ def handle_admin_action(call):
         del wallets[user_id]["pending"]
         bot.send_message(user_id, f"✅ شارژ شما به مبلغ {amount} تومان تایید شد.\nموجودی کیف پول: {wallets[user_id]['balance']} تومان")
         bot.send_message(ADMIN_ID, f"کاربر {user_id} با موفقیت شارژ شد.")
-    elif call.data.startswith("reject_"):
+    else:
         del wallets[user_id]["pending"]
-        bot.send_message(user_id, "❌ رسید شما توسط مدیر رد شد. لطفاً دوباره بررسی کنید.")
+        bot.send_message(user_id, "❌ رسید شما توسط مدیر رد شد.")
         bot.send_message(ADMIN_ID, f"رسید کاربر {user_id} رد شد.")
 
 # --- سرویس‌های من ---
@@ -137,8 +137,10 @@ def my_services(message):
 # --- تیکت پشتیبانی ---
 @bot.message_handler(func=lambda m: m.text == "🎫 تیکت پشتیبانی")
 def support(message):
+    bot.send_message(message.chat.id, f"📩 پیام خود را ارسال کنید.\nادمین: {SUPPORT_USERNAME}")
 
 # --- حساب من ---
+@bot.message_handler(func=lambda m: m.text == "👤 حساب من")
 def my_account(message):
     first_name = message.from_user.first_name
     username = message.from_user.username or "یوزرنیم ثبت نشده"
@@ -153,12 +155,12 @@ def history(message):
     else:
         bot.send_message(message.chat.id, "❌ هنوز خریدی ثبت نشده است.")
 
-# --- خرید همکاری (ساده، ارجاع به ادمین) ---
+# --- خرید همکاری ---
 @bot.message_handler(func=lambda m: m.text == "🤝 خرید همکاری")
 def coop_buy(message):
     bot.send_message(
         message.chat.id,
-        f"🤝 برای خرید همکاری و دریافت شرایط، به ادمین پیام بده:\n{@kayavpnadmin}"
+        f"🤝 برای خرید همکاری و دریافت شرایط، به ادمین پیام بده:\n{SUPPORT_USERNAME}"
     )
 
 bot.polling(none_stop=True)
