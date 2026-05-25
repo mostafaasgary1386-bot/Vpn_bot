@@ -137,7 +137,6 @@ def my_services(message):
 # --- تیکت پشتیبانی ---
 @bot.message_handler(func=lambda m: m.text == "🎫 تیکت پشتیبانی")
 def support(message):
-    bot.send_message(message.chat.id, f"📩 لطفا براي پشتيباني پيام خود را ارسال کنيد.\nادمین: {@kayavpnbot}")
 
 # --- حساب من ---
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
