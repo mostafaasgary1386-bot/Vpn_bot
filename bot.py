@@ -10,12 +10,13 @@ bot = telebot.TeleBot(API_TOKEN)
 wallets = {}
 services = {}
 
-# لیست کانفیگ‌ها
+#ليست کانفيگ ها
 configs = {
-    "1 گیگ": {"price": 150000, "details": "کانفیگ 1 گیگ پرسرعت"},
-    "2 گیگ": {"price": 300000, "details": "کانفیگ 2 گیگ پرسرعت"},
-    "4 گیگ": {"price": 600000, "details": "کانفیگ 4 گیگ پرسرعت"},
-    "5 گیگ": {"price": 750000, "details": "کانفیگ 5 گیگ پرسرعت"},
+    "1 گیگ": {"price": 199000, "details": "کانفیگ 1 گیگ پرسرعت"},
+    "2 گیگ": {"price": 398000, "details": "کانفیگ 2 گیگ پرسرعت"},
+    "4 گیگ": {"price": 796000, "details": "کانفیگ 4 گیگ پرسرعت"},
+    "5 گیگ": {"price": 995000, "details": "کانفیگ 5 گیگ پرسرعت"},
+    "6 گیگ": {"price": 1194000, "details": "کانفيگ 6 گيگ پرسرعت"},
 }
 
 ADMIN_ID = 5048925895
@@ -31,7 +32,7 @@ def send_welcome(message):
     markup.row("🛒 فروشگاه", "💰 کیف پول")
     markup.row("📦 سرویس‌های من", "📊 استعلام موجودی")
     markup.row("🎫 تیکت پشتیبانی", "👤 حساب من")
-    markup.row("📜 تاریخچه")
+    markup.row("📜 تاریخچه", "🤝 خرید همکاری")
     bot.send_message(
         message.chat.id,
         f"سلام {first_name} 👋\nبه ربات فروش خوش آمدی.",
@@ -89,7 +90,7 @@ def get_amount(message):
         message.chat.id,
         f"✅ مبلغ {amount} تومان ثبت شد.\n"
         f"برای تایید رسید لطفاً دقیقاً {final_amount} تومان واریز کنید.\n\n"
-        f"💳 شماره کارت:\n`{CARD_NUMBER}`\n👤 به نام: {CARD_NAME}\n\n"
+        f"💳 شماره کارت:\n{CARD_NUMBER}\n👤 به نام: {CARD_NAME}\n\n"
         f"📩 بعد از واریز، رسید پرداخت رو ارسال کنید.",
         parse_mode="Markdown"
     )
@@ -136,7 +137,7 @@ def my_services(message):
 # --- تیکت پشتیبانی ---
 @bot.message_handler(func=lambda m: m.text == "🎫 تیکت پشتیبانی")
 def support(message):
-    bot.send_message(message.chat.id, f"📩 برای پشتیبانی لطفاً پیام خود را ارسال کنید.\nادمین: {SUPPORT_USERNAME}")
+    bot.send_message(message.chat.id, f"📩 لطفا براي پشتيباني پيام خود را ارسال کنيد.\nادمین: {@kayavpnbot}")
 
 # --- حساب من ---
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
@@ -153,5 +154,13 @@ def history(message):
         bot.send_message(message.chat.id, "📜 تاریخچه خریدهای شما:\n" + "\n".join(user_services))
     else:
         bot.send_message(message.chat.id, "❌ هنوز خریدی ثبت نشده است.")
+
+# --- خرید همکاری (ساده، ارجاع به ادمین) ---
+@bot.message_handler(func=lambda m: m.text == "🤝 خرید همکاری")
+def coop_buy(message):
+    bot.send_message(
+        message.chat.id,
+        f"🤝 برای خرید همکاری و دریافت شرایط، به ادمین پیام بده:\n{@kayavpnadmin}"
+    )
 
 bot.polling(none_stop=True)
