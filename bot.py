@@ -43,10 +43,32 @@ def send_welcome(message):
 # ------------------ فروشگاه ------------------
 @bot.message_handler(func=lambda m: m.text == "🛒 فروشگاه")
 def shop(message):
-    text = "📦 لیست سرویس‌ها:\n\n"
+    markup = types.InlineKeyboardMarkup()
+    i = 1
     for name, info in configs.items():
-        text += f"🔹 {name}: {info['price']} تومان\n"
-    bot.send_message(message.chat.id, text)
+        btn = types.InlineKeyboardButton(
+            text=f"{i}. {name} - {info['price']} تومان 💎",
+            callback_data=f"buy_{name}"
+        )
+        markup.add(btn)
+        i += 1
+    bot.send_message(message.chat.id, "📦 فروشگاه فیلترشکن\n\nروی هر سرویس ضربه بزن تا خرید کنی:", reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("buy_"))
+def process_buy(call):
+    config_name = call.data.replace("buy_", "")
+    info = configs.get(config_name)
+    user_id = call.message.chat.id
+
+    if info:
+        balance = wallets.get(user_id, {}).get("balance", 0)
+        if balance >= info["price"]:
+            wallets[user_id]["balance"] -= info["price"]
+            services.setdefault(user_id, []).append(config_name)
+            history_data.setdefault(user_id, []).append(f"خرید {config_name} - {info['price']} تومان")
+            bot.send_message(user_id, f"✅ خرید {config_name} انجام شد.\n{info['details']}")
+        else:
+            bot.send_message(user_id, "❌ موجودی کافی نیست. لطفاً کیف پول را شارژ کنید.")
 
 # ------------------ کیف پول ------------------
 @bot.message_handler(func=lambda m: m.text == "💰 کیف پول")
@@ -151,8 +173,4 @@ def history(message):
         bot.send_message(message.chat.id, "❌ هیچ خریدی ثبت نشده است.")
 
 # ------------------ خرید همکاری ------------------
-@bot.message_handler(func=lambda m: m.text == "🤝 خرید همکاری")
-def coop(message):
-    bot.send_message(message.chat.id, f"برای همکاری پیام بده:\n{SUPPORT_USERNAME}")
-
-bot.polling(none_stop=True)
+@bot.message
