@@ -130,7 +130,7 @@ def my_services(message):
 # ------------------ تیکت پشتیبانی ------------------
 @bot.message_handler(func=lambda m: m.text == "🎫 تیکت پشتیبانی")
 def support(message):
-    bot.send_message(message.chat.id, f"برای پشتیبانی پیام بده:\n{@kayavpnadmin}")
+    bot.send_message(message.chat.id, f"برای پشتیبانی پیام بده:\n{kayavpnadmin}")
 
 # ------------------ حساب من ------------------
 @bot.message_handler(func=lambda m: m.text == "👤 حساب من")
@@ -151,6 +151,6 @@ def history(message):
 # ------------------ خرید همکاری ------------------
 @bot.message_handler(func=lambda m: m.text == "🤝 خرید همکاری")
 def coop(message):
-    bot.send_message(message.chat.id, f"برای همکاری پیام بده:\n{@kayavpnadmin}")
+    bot.send_message(message.chat.id, f"برای همکاری پیام بده:\n{kayavpnadmin}")
 
 bot.polling(none_stop=True)
